@@ -1,0 +1,18 @@
+# Hallazgos y Conclusiones - Prueba Técnica Automatización
+
+## 1. Ejercicio E2E (SauceDemo)
+- **Implementación**: Se aplicó el patrón Page Object Model (POM) para separar la lógica de la página de las definiciones de los pasos.
+- **Gestión de Datos**: Se utilizaron Modelos (`UserData`, `CheckoutData`) en lugar de fixtures estáticos, permitiendo una mayor flexibilidad y tipado en la data de prueba.
+- **Resultados**: El flujo completo de compra (login, agregar productos, carrito, checkout) se completó satisfactoriamente.
+- El uso de selectores por `#id`, cuando son estables y únicos, es una excelente práctica que simplifica el mapeo de elementos y mejora el rendimiento de los tests.
+
+## 2. Ejercicio API (PetStore)
+- **Generación Dinámica**: Se implementó `DataFactory` para evitar la dependencia de datos fijos, mejorando la robustez de las pruebas.
+- **Negative Testing**: Se incluyeron validaciones para casos de error (404), asegurando que la API maneje correctamente las peticiones fallidas.
+- **Arquitectura**: Se modularizaron las constantes y se implementó una capa de servicio (`PetService`) y aserciones reutilizables.
+- **Resultados**: Las pruebas confirmaron tanto los flujos exitosos como el manejo de errores esperado.
+
+## 3. Conclusiones Generales
+- El uso de Cucumber facilita la lectura de los escenarios tanto para perfiles técnicos como no técnicos.
+- La arquitectura basada en POM y Modelos hace que el framework sea escalable y fácil de mantener.
+- El proyecto está configurado para generar reportes Allure, proporcionando una visualización clara de los resultados de las pruebas.

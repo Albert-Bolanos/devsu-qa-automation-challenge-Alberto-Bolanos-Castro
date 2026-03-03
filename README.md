@@ -1,87 +1,99 @@
-# Proyecto Cypress con Cucumber
+# Prueba Técnica de Automatización (E2E & API)
 
-## 📋 Requisitos
-- Node.js v18.17.1 (instalado)
-- npm 9.6.7
+**Desarrollado por: Alberto Bolaños Castro - QA Automatizador**
 
-## 📦 Dependencias Instaladas
-- **Cypress**: v13.6.0 (compatible con Node.js 18)
-- **@badeball/cypress-cucumber-preprocessor**: v20.0.0
-- **@bahmutov/cypress-esbuild-preprocessor**: v2.2.8
+Este proyecto contiene una solución integral de automatización que combina pruebas de interfaz de usuario (E2E) y pruebas de servicios (API), utilizando **Cypress**, **Cucumber (Gherkin)** y una arquitectura profesional basada en **Page Object Model (POM)**.
 
-## 🚀 Comandos Disponibles
+---
 
-### Abrir Cypress (modo interactivo)
+## 🏗️ Arquitectura del Proyecto
+
+El proyecto sigue principios de **Clean Code** y **SOLID**, organizado en capas para facilitar el mantenimiento y la escalabilidad:
+
+- **E2E (SauceDemo)**: Implementado con el patrón **Page Object Model (POM)**.
+- **API (PetStore)**: Implementado con una **Capa de Servicios** (`PetService.js`) para desacoplar la lógica de las peticiones de los steps.
+- **Modelos (Models)**: Uso de clases (`PetData.js`, `UserData.js`) para la gestión de datos, eliminando la dependencia de fixtures estáticos.
+- **Aserciones Modulares**: Separación de responsabilidades entre `apiAssertions.js` y `uiAssertions.js`.
+- **Constantes Modulares**: Organización centralizada de URLs y Mensajes en la carpeta `support/constants/`.
+- **Data Factory**: Generación dinámica de datos para pruebas de API para evitar colisiones.
+
+---
+
+## 📁 Estructura de Carpetas
+
+```text
+cypress/
+├── e2e/
+│   ├── features/               # Archivos .feature (Gherkin)
+│   └── step_definitions/       # Implementación de los pasos (.js)
+├── pages/                      # Page Objects (UI)
+├── services/                   # Service Layer (API)
+├── models/                     # Clases de Modelos (Data)
+├── support/
+│   ├── assertions/             # Validaciones modulares (API/UI)
+│   ├── constants/              # URLs y Mensajes centralizados
+│   └── utils/                  # Utilidades como DataFactory.js
+```
+
+---
+
+## 🚀 Ejecución de Pruebas
+
+### 1. Requisitos Previos
+- Node.js v18+
+- Instalar dependencias:
+  ```bash
+  npm install
+  ```
+
+### 2. Ejecución Interactiva (Cypress Open)
+Para ver la ejecución en tiempo real en el navegador:
 ```bash
 npm run cy:open
 ```
 
-### Ejecutar pruebas (modo headless)
+### 3. Ejecución por Consola (Headless)
+Para ejecutar todas las pruebas de forma rápida:
 ```bash
 npm run cy:run
 ```
 
-## 📁 Estructura del Proyecto
+---
 
-```
-CypressC/
-├── cypress/
-│   ├── e2e/
-│   │   ├── ejemplo.feature          # Feature de ejemplo
-│   │   └── ejemplo.js               # Step definitions
-│   ├── support/
-│   │   ├── e2e.js                   # Configuración de soporte
-│   │   └── commands.js              # Comandos personalizados
-│   └── fixtures/                    # Datos de prueba
-├── cypress.config.js                # Configuración de Cypress
-├── .cypress-cucumber-preprocessorrc.json  # Config de Cucumber
-└── package.json
-```
+## ⚙️ Integración Continua (CI/CD)
 
-## ✍️ Crear Nuevas Pruebas
+El proyecto incluye un pipeline automatizado en **GitHub Actions** (`.github/workflows/main.yml`) que:
+- Se ejecuta en cada `push` o `pull_request` a las ramas principales.
+- Instala dependencias y ejecuta todos los tests (API y E2E).
+- Genera y almacena los reportes de **Allure** como artefactos de la ejecución para su posterior descarga y revisión.
 
-### 1. Crear un archivo .feature
-Crea un archivo en `cypress/e2e/` con extensión `.feature`:
+---
 
-```gherkin
-Feature: Mi nueva funcionalidad
+## 📊 Reportes con Allure
 
-  Scenario: Probar algo específico
-    Given que estoy en la página principal
-    When hago clic en el botón
-    Then debería ver el resultado
-```
+El proyecto genera reportes visuales detallados que incluyen pasos, tiempos y resultados.
 
-### 2. Crear los Step Definitions
-Crea un archivo `.js` con el mismo nombre en `cypress/e2e/`:
+1. **Limpiar y Ejecutar**: Borra resultados previos y corre los tests.
+   ```bash
+   npm run cy:run:allure
+   ```
 
-```javascript
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+2. **Generar y Abrir Reporte**: Crea el informe HTML y lo abre en el navegador.
+   ```bash
+   npm run allure:report
+   ```
 
-Given("que estoy en la página principal", () => {
-  cy.visit("https://example.com");
-});
+---
 
-When("hago clic en el botón", () => {
-  cy.get("button").click();
-});
+## 🧪 Escenarios Incluidos
 
-Then("debería ver el resultado", () => {
-  cy.get(".resultado").should("be.visible");
-});
-```
+### E2E: SauceDemo
+- **Flujo**: Login -> Agregar 2 productos -> Checkout -> Validación de compra exitosa.
+- **Mejora**: Uso de selectores por **ID** para mayor estabilidad.
 
-## 🔧 Notas Importantes
+### API: PetStore
+- **CRUD Dinámico**: Creación, actualización y consulta de mascotas.
+- **Validaciones**: Códigos de estado, esquemas de respuesta y tiempos.
+- **Negative Testing**: Manejo de errores 404 para mascotas inexistentes.
 
-- Las versiones están ajustadas para ser compatibles con Node.js 18
-- Si actualizas Node.js a v20+, puedes usar versiones más recientes de Cypress y Cucumber
-- Los archivos `.feature` deben estar en `cypress/e2e/`
-- Los step definitions pueden estar en el mismo directorio o subdirectorios
-
-## 📝 Ejemplo Incluido
-
-El proyecto incluye un ejemplo funcional:
-- `cypress/e2e/ejemplo.feature`
-- `cypress/e2e/ejemplo.js`
-
-Puedes ejecutarlo para verificar que todo funciona correctamente.
+---
